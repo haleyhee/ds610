@@ -1,7 +1,7 @@
 from mrjob.job import MRJob
 from mrjob.step import MRStep
 
-class RatingsBreakdwon(MRJob):
+class RatingsCount(MRJob):
     def steps(self):
         return [MRStep(mapper=self.mapper_get_ratings,
                       reducer=self.reducer_count_ratings), 
@@ -9,7 +9,7 @@ class RatingsBreakdwon(MRJob):
     
     def mapper_get_ratings(self, _, inline):
         (userID, movieID, rating, timestamp) = line.split('\t')
-        yield movieID, 1
+        yield rating, 1
         
     def reducer_count_ratings(self, key, values):
         yield str(sum(values)).zfill(5).key
@@ -19,4 +19,4 @@ class RatingsBreakdwon(MRJob):
             yield movie, count
             
  if __name__ == '__main__':
-    RatingsBreakdown.run()
+    RatingsCount.run()
